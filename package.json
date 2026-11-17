@@ -1,0 +1,128 @@
+{
+  "name": "dsh-character",
+  "displayName": "DSH 角色",
+  "description": "为主 agent 保存长期角色，跨模型保持身份、人设和会话绑定。",
+  "version": "0.3.6",
+  "private": true,
+  "license": "(MIT AND CC-BY-NC-SA-4.0)",
+  "type": "module",
+  "engines": {
+    "node": ">=22.19.0",
+    "dsh": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0"
+  },
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./typert": {
+      "types": "./lib/typert.host.d.ts",
+      "default": "./lib/typert.host.js"
+    },
+    "./remote": {
+      "types": "./lib/typert.remote-client.d.ts",
+      "default": "./lib/typert.remote-client.js"
+    },
+    "./types": {
+      "types": "./lib/types/shared/types.d.ts",
+      "default": "./lib/shared/types.js"
+    },
+    "./visuals": {
+      "types": "./lib/types/shared/visuals.d.ts",
+      "default": "./lib/shared/visuals.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json",
+    "./growth": {
+      "types": "./lib/types/shared/growth.d.ts",
+      "default": "./lib/shared/growth.js"
+    }
+  },
+  "files": [
+    "lib",
+    "lib/typert.host.js",
+    "lib/typert.host.d.ts",
+    "lib/typert.remote-client.js",
+    "lib/typert.remote-client.d.ts",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "characters",
+    "docs/verification.md",
+    "docs/growth-acceptance-2026-10-25.md",
+    "docs/native-ui-acceptance-2026-10-25.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.client.json",
+    "test": "tsx --test test/*.test.ts",
+    "check:package": "node scripts/verify-package.mjs",
+    "check": "npm run build && npm run typecheck && npm test",
+    "prepack": "npm run check && npm run check:package"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-api-gateway",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-session",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-api-session-controller",
+        "@deepseek-ai/dsh-client-ui-primitives"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.0.5 || ~4.1.0",
+    "@deepseek-ai/dsh-agent": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0",
+    "@deepseek-ai/dsh-session": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0",
+    "@deepseek-ai/dsh-session-projection": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0",
+    "@deepseek-ai/dsh-storage-domain": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0",
+    "@deepseek-ai/dsh-system-prompt": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0",
+    "@deepseek-ai/dsh-typert-protocol": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0",
+    "zod": "^4.4.3",
+    "@deepseek-ai/dsh-attachment": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0",
+    "@deepseek-ai/dsh-client-connection": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0",
+    "@deepseek-ai/dsh-llm": "0.2.1-rc.3 || 0.2.1-rc.4 || 0.2.1-rc.5 || 0.2.2-rc.1 || >=0.2.2-rc.3 <0.2.3-0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-api-gateway": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-api-remotes": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-api-session-controller": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-client-store": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-client-ui-conversation": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-client-ui-primitives": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-client-ui-renderer": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-client-ui-session": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-client-ui-settings": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-client-ui-slots": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-compaction": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-scope": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-session": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-storage": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-storage-json": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-typert-generator": "0.2.2-rc.3",
+    "@deepseek-ai/dsh-typert-registry": "0.2.2-rc.3",
+    "@types/node": "^24.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.25.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsx": "^4.20.0",
+    "typescript": "^6.0.3",
+    "zod": "4.6.6"
+  }
+}

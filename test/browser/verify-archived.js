@@ -1,0 +1,17 @@
+async page => {
+  if (new URL(page.url()).host !== '127.0.0.1:5503') throw new Error('Use only the isolated acceptance profile')
+  await page.getByRole('dialog', { name: '开始使用' }).getByRole('button', { name: '关闭', exact: true }).click()
+  await page.getByRole('button', { name: '选择角色', exact: true }).click()
+  await page.getByRole('menuitem', { name: '管理角色', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: '角色', exact: true })
+  await dialog.getByRole('checkbox', { name: '显示已归档' }).check()
+  await dialog.getByRole('button', { name: /青禾 · 验收 已归档/ }).click()
+  const style = dialog.getByRole('textbox', { name: /^表达方式 / })
+  if (await style.getAttribute('readonly') !== null) throw new Error('Archived role must remain editable')
+  await style.fill('中文短句，先说结论；归档后的编辑仍可用于已有绑定。保留字面 {{literal}}。')
+  await dialog.getByRole('button', { name: '保存角色', exact: true }).click()
+  await dialog.getByText('已保存。已绑定会话从下一轮开始使用更新，正在进行的回复保持不变。', { exact: true }).waitFor()
+  if (await dialog.getByRole('button', { name: '归档', exact: true }).count()) throw new Error('Already archived role still has archive action')
+  await dialog.getByRole('button', { name: '关闭角色管理', exact: true }).scrollIntoViewIfNeeded()
+  await page.screenshot({ path: 'output/playwright/character-dialog-dark.png' })
+}
